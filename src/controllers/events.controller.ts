@@ -89,3 +89,104 @@ export async function fetchEventById(req: Request, res: Response) {
     });
   }
 }
+
+export async function registerUserForEvent(req: Request, res: Response) {
+  try {
+    if (!req.user) throw new Error("user is not defined!");
+    const { eventId } = req.params;
+    const event = await Event.findOneAndUpdate(
+      {
+        _id: eventId!,
+        status: "active",
+        attendees: { $ne: req.user.id },
+        $expr: { $lt: [{ $size: "$attendees" }, "$capacity"] },
+      },
+      { $push: { attendees: req.user.id } },
+      { returnDocument: "after" },
+    );
+
+    if (!event) {
+      return res.status(400).json({
+        success: false,
+        message: "Unable to update event",
+      });
+    }
+
+    return res.status(201).json({
+      success: true,
+      message: "Event updated successfully",
+      event,
+    });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal server error" });
+  }
+}
+
+export async function deleteEvent(req: Request, res: Response) {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "User is not authenticated",
+      });
+    }
+
+    const { eventId } = req.params;
+
+    if (!eventId) {
+      return res.status(400).json({
+        success: false,
+        message: "eventId is required",
+      });
+    }
+
+    // Admin can delete any event
+    if (req.user.role === "admin") {
+      const event = await Event.findOneAndDelete({
+        _id: eventId,
+      });
+
+      if (!event) {
+        return res.status(404).json({
+          success: false,
+          message: "Event not found!",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Event deleted successfully",
+        event,
+      });
+    }
+
+    // Organizer can delete only their own event
+    const event = await Event.findOneAndDelete({
+      _id: eventId,
+      organizer: req.user.id,
+    });
+
+    if (!event) {
+      return res.status(404).json({
+        success: false,
+        message: "Event not found or you are not the organizer",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Event deleted successfully",
+      event,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+}

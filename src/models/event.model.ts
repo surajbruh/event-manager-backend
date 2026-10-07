@@ -1,18 +1,20 @@
-import mongoose, { Document, Schema, Types } from "mongoose";
+import mongoose from "mongoose";
 
-export interface IEvent extends Document {
+export interface IEvent extends mongoose.Document {
   title: string;
   description: string;
   location: string;
   startDate: Date;
   endDate: Date;
   capacity: number;
-  organizer: Types.ObjectId;
+  status: "active" | "cancelled";
+  organizer: mongoose.Types.ObjectId;
+  attendees: mongoose.Types.ObjectId[];
   createdAt: Date;
   updatedAt: Date;
 }
 
-const eventSchema = new Schema<IEvent>(
+const eventSchema = new mongoose.Schema<IEvent>(
   {
     title: {
       type: String,
@@ -49,17 +51,23 @@ const eventSchema = new Schema<IEvent>(
       type: Number,
       required: true,
       min: 1,
+      max: 100000,
+      default: 50,
     },
-
+    status: { type: String, enum: ["active", "cancelled"], default: "active" },
     organizer: {
-      type: Schema.Types.ObjectId,
+      type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
+      index: true,
     },
+    attendees: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   {
     timestamps: true,
   },
 );
+eventSchema.index({ attendees: 1 });
 
-export const Event = mongoose.model<IEvent>("Event", eventSchema);
+const Event = mongoose.model("Event", eventSchema);
+export { Event };

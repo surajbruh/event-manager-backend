@@ -3,7 +3,7 @@ import dotenv, { type DotenvConfigOptions } from "dotenv";
 import cors, { type CorsOptions } from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
-import router from "./routes/index.routes";
+import router from "./routes/index.routes.js";
 
 const configOptions: DotenvConfigOptions = {};
 dotenv.config(configOptions);
