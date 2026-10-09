@@ -1,0 +1,2 @@
+redis caching
+data & schema validation

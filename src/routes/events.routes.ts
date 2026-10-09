@@ -7,12 +7,14 @@ import {
   fetchEventById,
   registerUserForEvent,
 } from "../controllers/events.controller";
+import { listQueryValidation } from "../validators/events";
+import validate from "../middleware/validate.middleware";
 
 const eventsRouter = Router();
 
 eventsRouter
   .route("/")
-  .get(fetchAllEvents) //get all events
+  .get(listQueryValidation, validate, fetchAllEvents) //get all events
   .post(authenticateToken, createEvent); // create new event (protected route)
 
 eventsRouter

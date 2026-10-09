@@ -1,5 +1,6 @@
 import type { Request, Response } from "express";
 import { Event } from "../models/event.model";
+import redisClient from "../redis.config";
 
 export async function createEvent(req: Request, res: Response) {
   try {
@@ -49,11 +50,36 @@ export async function createEvent(req: Request, res: Response) {
 
 export async function fetchAllEvents(req: Request, res: Response) {
   try {
-    const events = await Event.find().lean();
+    const { q, category, page = "1", limit = "10" } = req.query;
+
+    const currentPage = Number(page);
+    const pageLimit = Number(limit);
+
+    const filter: Record<string, unknown> = {};
+
+    if (category) filter.category = category;
+
+    if (q) {
+      const search = String(q).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+      const rx = new RegExp(search, "i");
+
+      filter.$or = [{ title: rx }, { location: rx }];
+    }
+
+    const [events, total] = await Promise.all([
+      Event.find(filter)
+        .sort({ startDate: 1 })
+        .skip((currentPage - 1) * pageLimit)
+        .limit(pageLimit),
+      Event.countDocuments(filter),
+    ]);
+
     return res.status(200).json({
       success: true,
-      message: "Events fetched successfully",
       events,
+      page: currentPage,
+      total,
+      pages: Math.max(1, Math.ceil(total / pageLimit)),
     });
   } catch (error) {
     console.error("FETCH_ALL_EVENT_CONTROLLER_ERROR:", error);
@@ -68,13 +94,29 @@ export async function fetchAllEvents(req: Request, res: Response) {
 export async function fetchEventById(req: Request, res: Response) {
   try {
     const { eventId } = req.params;
-    const event = await Event.findById(eventId);
-    if (!event) {
-      return res.status(404).json({
-        success: false,
-        message: "Event not found!",
+
+    const cacheKey = `events:${eventId}`;
+    const TTL = 300;
+
+    const cachedEvent = await redisClient.get(cacheKey);
+
+    if (cachedEvent)
+      return res.status(200).json({
+        success: true,
+        message: "cached data",
+        event: JSON.parse(cachedEvent),
       });
-    }
+
+    const event = await Event.findById(eventId);
+    // .populate("organizer", "name")
+    // .populate("attendees", "name");
+
+    await redisClient.setEx(cacheKey, TTL, JSON.stringify(event));
+
+    if (!event)
+      return res
+        .status(404)
+        .json({ success: false, message: "Event not found" });
 
     return res.status(200).json({
       success: true,
@@ -82,7 +124,7 @@ export async function fetchEventById(req: Request, res: Response) {
       event,
     });
   } catch (error) {
-    console.error("FETCH_EVENT_BY_ID_CONTROLLER_ERROR:", error);
+    console.error("FETCH__EVENT_CONTROLLER_ERROR:", error);
     return res.status(500).json({
       success: false,
       message: "Internal server error",
@@ -111,6 +153,9 @@ export async function registerUserForEvent(req: Request, res: Response) {
         message: "Unable to update event",
       });
     }
+
+    const cacheKey = `events:${eventId}`;
+    await redisClient.del(cacheKey);
 
     return res.status(201).json({
       success: true,
