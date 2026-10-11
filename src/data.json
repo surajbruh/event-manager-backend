@@ -1,0 +1,195 @@
+{
+  "crendentials": {
+    "name": "admin",
+    "email": "admin@dev.com",
+    "password": "password123",
+    "role": "admin"
+  },
+  "events": [
+    {
+      "_id": "6ac351dc7a8e6232667ed945",
+      "title": "AI for Web Developers",
+      "description": "Learn how developers can integrate AI-powered features such as chatbots, text generation, embeddings, and intelligent search into web applications.",
+      "location": "Google Developer Space, Bandra, Mumbai",
+      "startDate": "2026-10-28T14:00:00+05:30",
+      "endDate": "2026-10-28T18:00:00+05:30",
+      "capacity": 120,
+      "status": "active",
+      "organizer": "68d2a1b4c8f1a00123456805",
+      "attendees": ["68d2a1b4c8f1a00123456806", "68d2a1b4c8f1a00123456807"],
+      "createdAt": "2026-09-25T11:00:00+05:30",
+      "updatedAt": "2026-10-01T09:30:00+05:30"
+    },
+    {
+      "_id": "6ac351dc7a8e6232667ed948",
+      "title": "Full Stack Career Workshop",
+      "description": "A career-focused workshop for aspiring full-stack developers covering portfolios, GitHub, resumes, interviews, and real-world project development.",
+      "location": "Navi Mumbai Innovation Hub, Vashi",
+      "startDate": "2026-11-08T10:00:00+05:30",
+      "endDate": "2026-11-08T16:00:00+05:30",
+      "capacity": 100,
+      "status": "active",
+      "organizer": "68d2a1b4c8f1a00123456815",
+      "attendees": [
+        "68d2a1b4c8f1a00123456816",
+        "68d2a1b4c8f1a00123456817",
+        "68d2a1b4c8f1a00123456818"
+      ],
+      "createdAt": "2026-10-01T09:00:00+05:30",
+      "updatedAt": "2026-10-03T16:30:00+05:30"
+    },
+    {
+      "_id": "6ac351dc7a8e6232667ed942",
+      "title": "React & Next.js Workshop",
+      "description": "Hands-on workshop covering React fundamentals, Next.js, server-side rendering, API routes, and production deployment.",
+      "location": "T-Hub Learning Center, Andheri East, Mumbai",
+      "startDate": "2026-10-18T11:00:00+05:30",
+      "endDate": "2026-10-18T17:00:00+05:30",
+      "capacity": 80,
+      "status": "active",
+      "organizer": "68d2a1b4c8f1a00123456793",
+      "attendees": [
+        "68d2a1b4c8f1a00123456794",
+        "68d2a1b4c8f1a00123456795",
+        "6abd38fcdbccd928b05c7731"
+      ],
+      "createdAt": "2026-09-22T10:15:00+05:30",
+      "updatedAt": "2026-10-07T09:19:26.549Z"
+    },
+    {
+      "_id": "6ac351dc7a8e6232667ed949",
+      "title": "JavaScript Performance Masterclass",
+      "description": "Deep dive into JavaScript performance, browser rendering, memory management, asynchronous programming, and optimization techniques.",
+      "location": "NMIMS University, Vile Parle, Mumbai",
+      "startDate": "2026-11-12T10:00:00+05:30",
+      "endDate": "2026-11-12T17:00:00+05:30",
+      "capacity": 90,
+      "status": "active",
+      "organizer": "68d2a1b4c8f1a00123456819",
+      "attendees": [
+        "68d2a1b4c8f1a00123456820",
+        "68d2a1b4c8f1a00123456821",
+        "6abd38fcdbccd928b05c7731"
+      ],
+      "createdAt": "2026-10-02T11:30:00+05:30",
+      "updatedAt": "2026-10-07T06:39:43.708Z"
+    },
+    {
+      "_id": "6ac351dc7a8e6232667ed947",
+      "title": "Open Source Contributors Meetup",
+      "description": "Meet developers contributing to open-source projects and learn about Git, GitHub, issue tracking, pull requests, and maintaining open-source projects.",
+      "location": "St. Xavier's College, Mumbai",
+      "startDate": "2026-11-05T11:00:00+05:30",
+      "endDate": "2026-11-05T15:00:00+05:30",
+      "capacity": 70,
+      "status": "active",
+      "organizer": "68d2a1b4c8f1a00123456812",
+      "attendees": ["68d2a1b4c8f1a00123456813", "68d2a1b4c8f1a00123456814"],
+      "createdAt": "2026-09-30T12:00:00+05:30",
+      "updatedAt": "2026-10-03T10:15:00+05:30"
+    },
+    {
+      "_id": "6ac351dc7a8e6232667ed94a",
+      "title": "Backend Engineering Meetup",
+      "description": "An evening meetup focused on backend architecture, databases, caching, queues, authentication, scalability, and system design.",
+      "location": "WeWork, Lower Parel, Mumbai",
+      "startDate": "2026-11-15T17:00:00+05:30",
+      "endDate": "2026-11-15T21:00:00+05:30",
+      "capacity": 150,
+      "status": "cancelled",
+      "organizer": "68d2a1b4c8f1a00123456822",
+      "attendees": ["68d2a1b4c8f1a00123456823", "68d2a1b4c8f1a00123456824"],
+      "createdAt": "2026-09-15T14:00:00+05:30",
+      "updatedAt": "2026-10-04T18:00:00+05:30"
+    },
+    {
+      "_id": "6ac351dc7a8e6232667ed944",
+      "title": "Node.js Backend Bootcamp",
+      "description": "A practical backend development bootcamp covering Node.js, Express, MongoDB, authentication, REST APIs, and background jobs.",
+      "location": "Hiranandani Knowledge Park, Powai, Mumbai",
+      "startDate": "2026-10-25T10:00:00+05:30",
+      "endDate": "2026-10-25T18:00:00+05:30",
+      "capacity": 100,
+      "status": "active",
+      "organizer": "68d2a1b4c8f1a00123456801",
+      "attendees": [
+        "68d2a1b4c8f1a00123456802",
+        "68d2a1b4c8f1a00123456803",
+        "68d2a1b4c8f1a00123456804"
+      ],
+      "createdAt": "2026-09-18T13:00:00+05:30",
+      "updatedAt": "2026-09-29T17:00:00+05:30"
+    },
+    {
+      "_id": "6ac351dc7a8e6232667ed941",
+      "title": "Mumbai Tech Meetup 2026",
+      "description": "A community meetup for developers, engineers, and tech enthusiasts to discuss modern web development, AI, and emerging technologies.",
+      "location": "WeWork, BKC, Mumbai",
+      "startDate": "2026-10-15T10:00:00+05:30",
+      "endDate": "2026-10-15T16:00:00+05:30",
+      "capacity": 150,
+      "status": "active",
+      "organizer": "68d2a1b4c8f1a00123456789",
+      "attendees": [
+        "68d2a1b4c8f1a00123456790",
+        "68d2a1b4c8f1a00123456791",
+        "68d2a1b4c8f1a00123456792",
+        "6abd38fcdbccd928b05c7731"
+      ],
+      "createdAt": "2026-09-20T09:00:00+05:30",
+      "updatedAt": "2026-10-07T08:50:31.915Z"
+    },
+    {
+      "_id": "6ac351dc7a8e6232667ed943",
+      "title": "Mumbai Startup Summit",
+      "description": "A networking event bringing together startup founders, developers, investors, and aspiring entrepreneurs from across Mumbai.",
+      "location": "Jio World Convention Centre, BKC, Mumbai",
+      "startDate": "2026-10-22T09:00:00+05:30",
+      "endDate": "2026-10-22T19:00:00+05:30",
+      "capacity": 500,
+      "status": "active",
+      "organizer": "68d2a1b4c8f1a00123456796",
+      "attendees": [
+        "68d2a1b4c8f1a00123456797",
+        "68d2a1b4c8f1a00123456798",
+        "68d2a1b4c8f1a00123456799",
+        "68d2a1b4c8f1a00123456800"
+      ],
+      "createdAt": "2026-09-10T08:30:00+05:30",
+      "updatedAt": "2026-10-02T11:20:00+05:30"
+    },
+    {
+      "_id": "6ac351dc7a8e6232667ed946",
+      "title": "MongoDB Developer Day",
+      "description": "Explore MongoDB data modeling, aggregation pipelines, indexing, performance optimization, and building scalable applications.",
+      "location": "NESCO Centre, Goregaon, Mumbai",
+      "startDate": "2026-11-02T09:30:00+05:30",
+      "endDate": "2026-11-02T17:30:00+05:30",
+      "capacity": 200,
+      "status": "active",
+      "organizer": "68d2a1b4c8f1a00123456808",
+      "attendees": [
+        "68d2a1b4c8f1a00123456809",
+        "68d2a1b4c8f1a00123456810",
+        "68d2a1b4c8f1a00123456811"
+      ],
+      "createdAt": "2026-09-28T10:00:00+05:30",
+      "updatedAt": "2026-10-02T14:00:00+05:30"
+    },
+    {
+      "_id": "6ac62982d2e197cb25ad86e1",
+      "title": "Mumbai Tech Meetup 2026",
+      "description": "A community meetup for developers, engineers, and tech enthusiasts to discuss modern web development, AI, and emerging technologies.",
+      "location": "WeWork, BKC, Mumbai",
+      "startDate": "2026-10-30T00:00:00.000Z",
+      "endDate": "2026-10-26T00:00:00.000Z",
+      "capacity": 150,
+      "status": "active",
+      "organizer": "6abd38fcdbccd928b05c7731",
+      "attendees": [],
+      "createdAt": "2026-10-07T11:14:10.306Z",
+      "updatedAt": "2026-10-07T11:14:10.306Z",
+      "__v": 0
+    }
+  ]
+}

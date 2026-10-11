@@ -1,2 +1,4 @@
 redis caching
 data & schema validation
+multer & supabase integration for image file upload
+complete seed.ts

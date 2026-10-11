@@ -69,8 +69,8 @@ export async function fetchAllEvents(req: Request, res: Response) {
     const [events, total] = await Promise.all([
       Event.find(filter)
         .sort({ startDate: 1 })
-        .skip((currentPage - 1) * pageLimit)
-        .limit(pageLimit),
+        .skip((currentPage - 1) * pageLimit),
+      // .limit(pageLimit),
       Event.countDocuments(filter),
     ]);
 
