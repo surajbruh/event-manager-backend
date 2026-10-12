@@ -7,6 +7,7 @@ export interface IEvent extends mongoose.Document {
   startDate: Date;
   endDate: Date;
   capacity: number;
+  image?: string;
   status: "active" | "cancelled";
   organizer: mongoose.Types.ObjectId;
   attendees: mongoose.Types.ObjectId[];
@@ -52,7 +53,11 @@ const eventSchema = new mongoose.Schema<IEvent>(
       required: true,
       min: 1,
       max: 100000,
-      default: 50,
+      // default: 50,
+    },
+    image: {
+      type: String,
+      trim: true,
     },
     status: { type: String, enum: ["active", "cancelled"], default: "active" },
     organizer: {

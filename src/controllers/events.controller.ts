@@ -1,11 +1,15 @@
 import type { Request, Response } from "express";
 import { Event } from "../models/event.model";
 import redisClient from "../redis.config";
+import { supabase } from "../supbase.config";
+import { generateFilename } from "../utils";
 
 export async function createEvent(req: Request, res: Response) {
   try {
     const { title, description, location, startDate, endDate, capacity } =
       req.body;
+    // console.log(req.body, req.file);
+    // return res.status(200).json({ ok: true });
 
     const user = req.user;
 
@@ -16,12 +20,33 @@ export async function createEvent(req: Request, res: Response) {
       });
     }
 
-    if (user.role !== "organizer") {
+    if (user.role !== "organizer" && user.role !== "admin") {
       return res.status(403).json({
         success: false,
         message: "Only organizers can create events",
       });
     }
+
+    const file = req.file;
+
+    if (!file)
+      return res
+        .status(400)
+        .json({ success: false, message: "no images uploaded!" });
+
+    const filename = generateFilename(file);
+    const { error } = await supabase.storage
+      .from("images")
+      .upload(filename, file.buffer, {
+        contentType: file.mimetype,
+        upsert: false,
+      });
+
+    if (error) return res.status(500).json({ error: error.message });
+
+    const { data: publicURLData } = supabase.storage
+      .from("images")
+      .getPublicUrl(filename);
 
     const newEvent = await Event.create({
       title,
@@ -30,6 +55,7 @@ export async function createEvent(req: Request, res: Response) {
       startDate,
       endDate,
       capacity,
+      image: publicURLData.publicUrl,
       organizer: user.id,
     });
 

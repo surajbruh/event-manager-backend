@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon"
+    "dev": "nodemon",
+    "seed": "npx tsx src/seed.ts"
   },
   "keywords": [],
   "author": "",

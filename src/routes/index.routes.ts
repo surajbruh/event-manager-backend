@@ -2,9 +2,9 @@ import { Router } from "express";
 import type { Request, Response } from "express";
 import authRouter from "./auth.routes.js";
 import eventsRouter from "./events.routes.js";
-import { upload } from "../multer.middleware.js";
+import { upload } from "../middleware/multer.middleware.js";
 import { supabase } from "../supbase.config.js";
-import { buffer } from "node:stream/consumers";
+import { generateFilename } from "../utils.js";
 
 const router = Router();
 
@@ -29,8 +29,7 @@ router
           return response.status(400).json({ error: "No file uploaded." });
 
         // Generate a unique filename to prevent overwriting existing assets
-        const fileExtension = file.originalname.split(".").pop();
-        const fileName = `${Date.now()}-${Math.random().toString(36).substring(2, 7)}.${fileExtension}`;
+        const fileName = generateFilename(file);
 
         const { data, error } = await supabase.storage
           .from("images")

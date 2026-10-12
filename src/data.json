@@ -2,8 +2,7 @@
   "crendentials": {
     "name": "admin",
     "email": "admin@dev.com",
-    "password": "password123",
-    "role": "admin"
+    "password": "password123"
   },
   "events": [
     {
