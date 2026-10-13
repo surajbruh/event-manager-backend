@@ -6,10 +6,12 @@ import {
   fetchAllEvents,
   fetchEventById,
   registerUserForEvent,
+  updateEvent,
 } from "../controllers/events.controller";
 import {
   createEventValidation,
   listQueryValidation,
+  updateEventValidation,
 } from "../validators/events";
 import validate from "../middleware/validate.middleware";
 import { upload } from "../middleware/multer.middleware";
@@ -30,6 +32,13 @@ eventsRouter
 eventsRouter
   .route("/:eventId")
   .get(fetchEventById) // fetch event by id
+  .patch(
+    authenticateToken,
+    upload.single("image"),
+    updateEventValidation,
+    validate,
+    updateEvent,
+  )
   .delete(authenticateToken, deleteEvent); // delete event
 
 eventsRouter

@@ -1,15 +1,14 @@
 import type { Request, Response } from "express";
-import { Event } from "../models/event.model";
+import { Event, type IEvent } from "../models/event.model";
 import redisClient from "../redis.config";
 import { supabase } from "../supbase.config";
 import { generateFilename } from "../utils";
+import mongoose from "mongoose";
 
 export async function createEvent(req: Request, res: Response) {
   try {
     const { title, description, location, startDate, endDate, capacity } =
       req.body;
-    // console.log(req.body, req.file);
-    // return res.status(200).json({ ok: true });
 
     const user = req.user;
 
@@ -254,6 +253,123 @@ export async function deleteEvent(req: Request, res: Response) {
     });
   } catch (error) {
     console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+}
+
+export async function updateEvent(req: Request, res: Response) {
+  try {
+    const { eventId } = req.params;
+
+    const user = req.user;
+
+    if (!user) {
+      return res.status(401).json({
+        success: false,
+        message: "Authentication required",
+      });
+    }
+
+    if (user.role !== "organizer" && user.role !== "admin") {
+      return res.status(403).json({
+        success: false,
+        message: "Only organizers and admins can update events",
+      });
+    }
+
+    if (!mongoose.isValidObjectId(eventId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid event ID",
+      });
+    }
+
+    // Only allow fields that the client is permitted to update.
+    const allowedFields = [
+      "title",
+      "description",
+      "location",
+      "category",
+      "startDate",
+      "endDate",
+      "capacity",
+      "isFeatured",
+      "status",
+    ] as const;
+
+    const payload: Record<string, unknown> = {};
+
+    for (const field of allowedFields) {
+      if (req.body[field] !== undefined) {
+        payload[field] = req.body[field];
+      }
+    }
+
+    // Upload a replacement image only when one was provided.
+    if (req.file) {
+      const filename = generateFilename(req.file);
+
+      const { error } = await supabase.storage
+        .from("images")
+        .upload(filename, req.file.buffer, {
+          contentType: req.file.mimetype,
+          upsert: false,
+        });
+
+      if (error) {
+        return res.status(500).json({
+          success: false,
+          message: "Image upload failed",
+        });
+      }
+
+      const { data } = supabase.storage.from("images").getPublicUrl(filename);
+
+      payload.image = data.publicUrl;
+    }
+
+    if (Object.keys(payload).length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "No update fields provided",
+      });
+    }
+
+    // Admins can update any event; organizers only their own.
+    const filter =
+      user.role === "admin"
+        ? { _id: eventId! }
+        : { _id: eventId!, organizer: user.id };
+
+    const updatedEvent = await Event.findOneAndUpdate(
+      filter,
+      { $set: payload },
+      {
+        new: true,
+        runValidators: true,
+      },
+    );
+
+    if (!updatedEvent) {
+      return res.status(404).json({
+        success: false,
+        message: "Event not found or you do not have permission to update it",
+      });
+    }
+
+    await redisClient.del(`events:${eventId}`);
+
+    return res.status(200).json({
+      success: true,
+      message: "Event updated successfully",
+      event: updatedEvent,
+    });
+  } catch (error) {
+    console.error("UPDATE_EVENT_CONTROLLER_ERROR:", error);
 
     return res.status(500).json({
       success: false,
