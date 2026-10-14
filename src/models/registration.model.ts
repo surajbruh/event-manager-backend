@@ -3,7 +3,7 @@ import mongoose, { Document, Schema, Types } from "mongoose";
 export interface IRegistration extends Document {
   user: Types.ObjectId;
   event: Types.ObjectId;
-  status: "registered" | "cancelled";
+  status: "confirmed" | "cancelled";
   createdAt: Date;
   updatedAt: Date;
 }
@@ -24,8 +24,8 @@ const registrationSchema = new Schema<IRegistration>(
 
     status: {
       type: String,
-      enum: ["registered", "cancelled"],
-      default: "registered",
+      enum: ["confirmed", "cancelled"],
+      default: "confirmed",
     },
   },
   {

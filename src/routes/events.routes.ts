@@ -5,7 +5,6 @@ import {
   deleteEvent,
   fetchAllEvents,
   fetchEventById,
-  registerUserForEvent,
   updateEvent,
 } from "../controllers/events.controller";
 import {
@@ -15,6 +14,10 @@ import {
 } from "../validators/events";
 import validate from "../middleware/validate.middleware";
 import { upload } from "../middleware/multer.middleware";
+import {
+  cancelRegistration,
+  registerUserForEvent,
+} from "../controllers/registration.controller";
 
 const eventsRouter = Router();
 
@@ -43,6 +46,7 @@ eventsRouter
 
 eventsRouter
   .route("/:eventId/register")
-  .patch(authenticateToken, registerUserForEvent); // register user for an event
+  .post(authenticateToken, registerUserForEvent) // register user for an event
+  .patch(authenticateToken, cancelRegistration);
 
 export default eventsRouter;

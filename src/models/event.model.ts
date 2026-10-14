@@ -6,7 +6,7 @@ export const eventStatus = ["published", "active", "completed", "cancelled"];
 export type EventCategory = "Tech" | "Music" | "Workshop" | "Community";
 export type EventStatus = "published" | "active" | "completed" | "cancelled";
 
-export interface IEvent extends mongoose.Document {
+export interface IEvent {
   image: string;
   title: string;
   description: string;
@@ -14,14 +14,11 @@ export interface IEvent extends mongoose.Document {
   category: EventCategory;
   startDate: Date;
   endDate: Date;
-  // registrationDeadline?: Date;
   capacity: number;
-  // price: number;
-  // tags: string[];
   isFeatured: boolean;
   status: EventStatus;
   organizer: mongoose.Types.ObjectId;
-  attendees: mongoose.Types.ObjectId[];
+  registeredCount: number;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -55,22 +52,7 @@ const eventSchema = new mongoose.Schema<IEvent>(
     endDate: {
       type: Date,
       required: true,
-      // validate: {
-      //   validator(this: IEvent, value: Date) {
-      //     return !this.startDate || value > this.startDate;
-      //   },
-      //   message: "endDate must be later than startDate.",
-      // },
     },
-    // registrationDeadline: {
-    //   type: Date,
-    //   validate: {
-    //     validator(this: IEvent, value?: Date) {
-    //       return !value || !this.startDate || value <= this.startDate;
-    //     },
-    //     message: "registrationDeadline must be on or before startDate.",
-    //   },
-    // },
     capacity: {
       type: Number,
       required: true,
@@ -81,11 +63,6 @@ const eventSchema = new mongoose.Schema<IEvent>(
         message: "capacity must be a whole number.",
       },
     },
-    // price: {
-    //   type: Number,
-    //   default: 0,
-    //   min: 0,
-    // },
     image: {
       type: String,
       required: true,
@@ -97,14 +74,6 @@ const eventSchema = new mongoose.Schema<IEvent>(
       required: true,
       index: true,
     },
-    // tags: {
-    //   type: [String],
-    //   default: [],
-    //   validate: {
-    //     validator: (values: string[]) => values.length <= 10,
-    //     message: "An event can have at most 10 tags.",
-    //   },
-    // },
     isFeatured: {
       type: Boolean,
       default: false,
@@ -121,9 +90,11 @@ const eventSchema = new mongoose.Schema<IEvent>(
       required: true,
       index: true,
     },
-    attendees: {
-      type: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
-      default: [],
+    registeredCount: {
+      type: Number,
+      // required: true,
+      default: 0,
+      min: 0,
     },
   },
   {
@@ -131,8 +102,7 @@ const eventSchema = new mongoose.Schema<IEvent>(
   },
 );
 
-eventSchema.index({ attendees: 1 });
-eventSchema.index({ title: "text", description: "text", tags: "text" });
+eventSchema.index({ title: "text", description: "text" });
 eventSchema.index({ status: 1, startDate: 1 });
 
 const Event = mongoose.model<IEvent>("Event", eventSchema);
