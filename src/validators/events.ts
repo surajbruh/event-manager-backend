@@ -52,6 +52,14 @@ export const createEventValidation = [
     .isLength({ min: 3, max: 200 })
     .withMessage("Location must be between 3 and 200 characters"),
 
+  body("category")
+    .isString()
+    .trim()
+    .notEmpty()
+    .withMessage("Category must be a non-empty string")
+    .isIn(eventCategory)
+    .withMessage("Category is not valid"),
+
   body("startDate")
     .notEmpty()
     .withMessage("Start date is required")

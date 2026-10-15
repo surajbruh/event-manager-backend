@@ -7,8 +7,15 @@ import mongoose from "mongoose";
 
 export async function createEvent(req: Request, res: Response) {
   try {
-    const { title, description, location, startDate, endDate, capacity } =
-      req.body;
+    const {
+      title,
+      description,
+      location,
+      category,
+      startDate,
+      endDate,
+      capacity,
+    } = req.body;
 
     const user = req.user;
 
@@ -48,13 +55,14 @@ export async function createEvent(req: Request, res: Response) {
       .getPublicUrl(filename);
 
     const newEvent = await Event.create({
+      image: publicURLData.publicUrl,
       title,
       description,
       location,
+      category,
       startDate,
       endDate,
       capacity,
-      image: publicURLData.publicUrl,
       organizer: user.id,
     });
 
@@ -94,7 +102,8 @@ export async function fetchAllEvents(req: Request, res: Response) {
     const [events, total] = await Promise.all([
       Event.find(filter)
         .sort({ startDate: 1 })
-        .skip((currentPage - 1) * pageLimit),
+        .skip((currentPage - 1) * pageLimit)
+        .populate("organizer", "name"),
       // .limit(pageLimit),
       Event.countDocuments(filter),
     ]);
@@ -132,9 +141,7 @@ export async function fetchEventById(req: Request, res: Response) {
         event: JSON.parse(cachedEvent),
       });
 
-    const event = await Event.findById(eventId);
-    // .populate("organizer", "name")
-    // .populate("attendees", "name");
+    const event = await Event.findById(eventId).populate("organizer", "name");
 
     await redisClient.setEx(cacheKey, TTL, JSON.stringify(event));
 
