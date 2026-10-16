@@ -1,10 +1,13 @@
 import mongoose, { Document, Schema } from "mongoose";
 
+export const userRole = ["user", "organizer", "admin"];
+export type UserRole = "user" | "organizer" | "admin";
+
 export interface IUser extends Document {
   name: string;
   email: string;
   password: string;
-  role: "user" | "organizer" | "admin";
+  role: UserRole;
   createdAt: Date;
   updatedAt: Date;
 }

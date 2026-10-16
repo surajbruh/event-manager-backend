@@ -59,6 +59,8 @@ export const register = async (req: Request, res: Response) => {
         name: user.name,
         email: user.email,
         role: user.role,
+        createdAt: user.createdAt,
+        updatedAt: user.updatedAt,
       },
     });
   } catch (error) {
