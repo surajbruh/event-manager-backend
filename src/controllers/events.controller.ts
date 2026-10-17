@@ -83,7 +83,7 @@ export async function createEvent(req: Request, res: Response) {
 
 export async function fetchAllEvents(req: Request, res: Response) {
   try {
-    const { q, category, page = "1", limit = "10" } = req.query;
+    const { q, category, page = "1", limit = "8", featured } = req.query;
 
     const currentPage = Number(page);
     const pageLimit = Number(limit);
@@ -99,12 +99,14 @@ export async function fetchAllEvents(req: Request, res: Response) {
       filter.$or = [{ title: rx }, { location: rx }];
     }
 
+    if (featured) filter.isFeatured = true;
+
     const [events, total] = await Promise.all([
       Event.find(filter)
         .sort({ startDate: 1 })
         .skip((currentPage - 1) * pageLimit)
-        .populate("organizer", "name"),
-      // .limit(pageLimit),
+        .populate("organizer", "name")
+        .limit(pageLimit),
       Event.countDocuments(filter),
     ]);
 
