@@ -4,6 +4,7 @@ import cors, { type CorsOptions } from "cors";
 import cookieParser from "cookie-parser";
 import morgan from "morgan";
 import router from "./routes/index.routes.js";
+import { errorHanlder } from "./middleware/error.middleware.js";
 
 const configOptions: DotenvConfigOptions = {};
 dotenv.config(configOptions);
@@ -33,5 +34,7 @@ app.use(cookieParser());
 app.use(morgan("tiny"));
 
 app.use("/", router);
+
+app.use(errorHanlder);
 
 export { app, PORT };
